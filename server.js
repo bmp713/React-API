@@ -38,7 +38,7 @@ app.get("/read", async (req, res) => {
     try{
         readPosts()
             .then( (result) => {
-                console.log("read/ posts => ", result);
+                // console.log("read/ posts => ", result);
                 res.send(result);     
             });
     }catch(err){console.log(err)}
@@ -49,7 +49,7 @@ const readPosts = async () => {
     try{
         const posts = await Posts.find({});
 
-        console.log('readPosts =>', posts);
+        // console.log('readPosts =>', posts);
         return posts;
     }catch(err){console.log(err)}
 }
@@ -60,7 +60,7 @@ app.get("/read/:id", async (req, res) => {
             .then( (result) => {
                 console.log("read/id => ", result);
                 res.send(result);    
-            });
+            }); 
     }catch(err){console.log(err)};
 })
 
@@ -69,7 +69,7 @@ const readProperty = async (id) => {
     console.log("readProperty id =>",id);
     try{
         const post = await Posts.findOne({id:id});
-        console.log('readProperty =>', property);
+        // console.log('readProperty =>', property);
         return posts;
     }catch(err){
         console.log(err);
@@ -78,7 +78,7 @@ const readProperty = async (id) => {
 
 
 app.post("/create", async (req, res) => {
-    console.log("/create req.body =>", req.body);
+    // console.log("/create req.body =>", req.body);
 
     try{
         let post = {
@@ -181,11 +181,6 @@ const createPost = async (data) => {
 
 // // Upload new image
 // app.post("/upload", upload.single("image"), async (req, res) => {
-
-//     console.log("/upload req.file =>", req.file);
-//     console.log("/upload POST req.body =>", req.body);
-//     console.log("/upload req.file.filename =>", req.file.filename);
-//     console.log("/upload req.file.originalname =>", req.file.originalname);
     
 //     // Pass new name of file to create() 
 //     imageName = req.file.filename;
