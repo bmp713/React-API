@@ -117,7 +117,7 @@ const createPost = async (data) => {
 
 
 app.delete("/delete/:id", async (req, res) => {
-    try{
+    try{ 
         const post = await Posts.deleteOne({id:req.params.id});
         console.log('delete', req.params.id);
 
