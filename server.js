@@ -32,7 +32,7 @@ const connection = mongoose.connect(
     .catch( (err) => {
         console.error(`Error connecting to the database. ${err}`);
     })
-
+ 
 
 app.get("/read", async (req, res) => {
     try{
