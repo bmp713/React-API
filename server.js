@@ -127,7 +127,7 @@ app.delete("/delete/:id", async (req, res) => {
     }
 }); 
 
-
+ 
 // // Update product
 // app.post("/update/:id", async (req, res) => {
 //     console.log("/update POST req.body =>", req.body);
