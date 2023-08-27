@@ -95,7 +95,7 @@ app.post("/create", async (req, res) => {
         console.log("/create =", post);
         createPost(post);
 
-        //await property.save();
+        //await post.save();
         res.send( post ); 
 
     }catch(err){
@@ -128,90 +128,85 @@ app.delete("/delete/:id", async (req, res) => {
 }); 
 
  
-// // Update product
-// app.post("/update/:id", async (req, res) => {
-//     console.log("/update POST req.body =>", req.body);
+app.post("/update/:id", async (req, res) => {
+    console.log("/update req.body =>", req.body);
 
-//     try{
-//         const property = await Properties.findOne({id:req.params.id});
-//         console.log('property =>', property);
+    try{
+        const post = await Posts.findOne({id:req.params.id});
 
-//         property.city = req.body.city;
-//         property.name = req.body.name;
-//         property.type = req.body.type;
-//         property.rooms = req.body.rooms;
-//         property.price = req.body.price;
-//         property.description = req.body.description;
-//         property.img = req.body.img;
+        post.city = req.body.city;
+        post.name = req.body.name;
+        post.type = req.body.type;
+        post.rooms = req.body.rooms;
+        post.price = req.body.price;
+        post.description = req.body.description;
+        post.img = req.body.img;
+        post.url = req.body.url
 
-//         await property.save();
-//         res.send( property );
+        await post.save();
+        res.send( post );
 
-//     }catch(err){
-//         console.log(err);
-//     }
+    }catch(err){
+        console.log(err);
+    }
 
-// }); 
-
-
-// // Access file from multer
-// const multer = require("multer");
-
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, "./assets/")
-//     },
-//     filename: function (req, file, cb) {
-//         console.log(file.mimetype);
-//         console.log("file = ", file);
-
-//         cb(null, Date.now() + '.jpg')  
-//         // cb(null, file.originalfilename);  
-//     }
-// });
-// const upload = multer({
-//     storage: storage
-// })
+}); 
 
 
-// // Upload new image
-// app.post("/upload", upload.single("image"), async (req, res) => {
+// Upload new image
+app.post("/upload", upload.single("image"), async (req, res) => {
     
-//     // Pass new name of file to create() 
-//     imageName = req.file.filename;
+    // Pass new name of file to create() 
+    imageName = req.file.filename;
+
+    // Upload image file to Firestore, S3
+    // Initialize Cloud Storage reference
+    const firebase = initializeApp(firebaseConfig);
+    const storage = getStorage(firebase);
+
+    const file = req.file.filename;
+    const storageRef = ref(storage, 'assets/'+ file.name );
+
+    uploadBytes(storageRef, file )
+        .then( (snapshot) => {
+            console.log('server.js => Uploaded file, ', file);
+            console.log('server.js => snapshot =>', snapshot);
+
+            getDownloadURL(snapshot.ref).then( (url) => {
+                console.log('getDownloadURL() url =>', url);
+                this.url =  url;
+            });
+        })
+        .catch( (error) => {
+            console.log("File error =>", error);
+        })
+
+    try{
+        res.send(req.file);
+    }catch(err){
+        console.log(err);
+    }
+}); 
 
 
-//     // Upload image file to Firestore, S3
-//     // Initialize Cloud Storage reference
-//     // const firebase = initializeApp(firebaseConfig);
-//     // const storage = getStorage(firebase);
+// Access file from multer
+const multer = require("multer");
 
-//     // const file = req.file.filename;
-//     // const storageRef = ref(storage, 'assets/'+ file.name );
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./assets/")
+    },
+    filename: function (req, file, cb) {
+        console.log(file.mimetype);
+        console.log("file = ", file);
 
-//     // uploadBytes(storageRef, file )
-//     //     .then( (snapshot) => {
-//     //         console.log('server.js => Uploaded file, ', file);
-//     //         console.log('server.js => snapshot =>', snapshot);
-
-//     //         getDownloadURL(snapshot.ref).then( (url) => {
-//     //             console.log('getDownloadURL() url =>', url);
-//     //             this.url =  url;
-//     //         });
-//     //     })
-//     //     .catch( (error) => {
-//     //         console.log("File error =>", error);
-//     //     })
-
-
-//     try{
-//         res.send(req.file);
-//     }catch(err){
-//         console.log(err);
-//     }
-
- 
-// }); 
+        cb(null, Date.now() + '.jpg')  
+        // cb(null, file.originalfilename);  
+    }
+});
+const upload = multer({
+    storage: storage
+})
 
 
 
