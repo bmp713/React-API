@@ -65,11 +65,10 @@ app.get("/read/:id", async (req, res) => {
 })
 
 
-const readProperty = async (id) => {
-    console.log("readProperty id =>",id);
+const readPost = async (id) => {
+    console.log("readPost id =>",id);
     try{
         const post = await Posts.findOne({id:id});
-        // console.log('readProperty =>', property);
         return posts;
     }catch(err){
         console.log(err);
@@ -117,6 +116,18 @@ const createPost = async (data) => {
 }
 
 
+app.delete("/delete/:id", async (req, res) => {
+    try{
+        const post = await Posts.deleteOne({id:req.params.id});
+        console.log('delete', req.params.id);
+
+        res.send(post);
+    }catch(err){
+        console.log(err);
+    }
+}); 
+
+
 // // Update product
 // app.post("/update/:id", async (req, res) => {
 //     console.log("/update POST req.body =>", req.body);
@@ -136,23 +147,6 @@ const createPost = async (data) => {
 //         await property.save();
 //         res.send( property );
 
-//     }catch(err){
-//         console.log(err);
-//     }
-
-// }); 
-
-
-// // Delete product by id
-// app.delete("/delete/:id", async (req, res) => {
-    
-//     try{
-//         const property = await Properties.deleteOne({id:req.params.id});
-//         console.log('property =>', property);
-
-//         //await property.save();
-//         res.send( property );
-//         //res.status(204).send();
 //     }catch(err){
 //         console.log(err);
 //     }
