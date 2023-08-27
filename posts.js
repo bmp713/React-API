@@ -9,6 +9,7 @@ const postsSchema = new mongoose.Schema({
     rooms: String,
     price: String,
     img: String,
+    url: String
 });
 
 module.exports = mongoose.model('Posts', postsSchema);

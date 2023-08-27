@@ -32,7 +32,7 @@ const connection = mongoose.connect(
     .catch( (err) => {
         console.error(`Error connecting to the database. ${err}`);
     })
- 
+
 
 app.get("/read", async (req, res) => {
     try{
@@ -89,7 +89,8 @@ app.post("/create", async (req, res) => {
             description: req.body.description,
             rooms: req.body.rooms,
             price: req.body.price,
-            img: req.body.img
+            img: req.body.img,
+            url: req.body.url
         }
 
         console.log("/create =", post);
