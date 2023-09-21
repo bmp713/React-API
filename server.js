@@ -5,7 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 
-const port = process.env.PORT || 4000; 
+const port = process.env.PORT || 5000; 
 const app = express();  
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -153,40 +153,40 @@ app.post("/update/:id", async (req, res) => {
 }); 
 
 
-// Upload new image
-app.post("/upload", upload.single("image"), async (req, res) => {
+// // Upload new image
+// app.post("/upload", upload.single("image"), async (req, res) => {
     
-    // Pass new name of file to create() 
-    imageName = req.file.filename;
+//     // Pass new name of file to create() 
+//     imageName = req.file.filename;
 
-    // Upload image file to Firestore, S3
-    // Initialize Cloud Storage reference
-    const firebase = initializeApp(firebaseConfig);
-    const storage = getStorage(firebase);
+//     // Upload image file to Firestore, S3
+//     // Initialize Cloud Storage reference
+//     const firebase = initializeApp(firebaseConfig);
+//     const storage = getStorage(firebase);
 
-    const file = req.file.filename;
-    const storageRef = ref(storage, 'assets/'+ file.name );
+//     const file = req.file.filename;
+//     const storageRef = ref(storage, 'assets/'+ file.name );
 
-    uploadBytes(storageRef, file )
-        .then( (snapshot) => {
-            console.log('server.js => Uploaded file, ', file);
-            console.log('server.js => snapshot =>', snapshot);
+//     uploadBytes(storageRef, file )
+//         .then( (snapshot) => {
+//             console.log('server.js => Uploaded file, ', file);
+//             console.log('server.js => snapshot =>', snapshot);
 
-            getDownloadURL(snapshot.ref).then( (url) => {
-                console.log('getDownloadURL() url =>', url);
-                this.url =  url;
-            });
-        })
-        .catch( (error) => {
-            console.log("File error =>", error);
-        })
+//             getDownloadURL(snapshot.ref).then( (url) => {
+//                 console.log('getDownloadURL() url =>', url);
+//                 this.url =  url;
+//             });
+//         })
+//         .catch( (error) => {
+//             console.log("File error =>", error);
+//         })
 
-    try{
-        res.send(req.file);
-    }catch(err){
-        console.log(err);
-    }
-}); 
+//     try{
+//         res.send(req.file);
+//     }catch(err){
+//         console.log(err);
+//     }
+// }); 
 
 
 // Access file from multer
